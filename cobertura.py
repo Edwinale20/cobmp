@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 import openpyxl
+import io
 
 st.set_page_config(page_title="Coberturas Marca Propia", page_icon="🏪")
 
