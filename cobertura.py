@@ -123,4 +123,5 @@ for f in files:
     df = download_excel_df(access_token, f["id"])
     st.write("Shape:", df.shape)
     venta_semanal.append(df)
-#st.dataframe(VENTA, use_container_width=True)
+
+st.dataframe(VENTA, use_container_width=True)
