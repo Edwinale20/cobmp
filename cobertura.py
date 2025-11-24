@@ -3,7 +3,9 @@ import requests
 
 st.set_page_config(page_title="Coberturas Marca Propia", page_icon="🏪")
 
-st.title("🏪 Coberturas de marca propia en tiempo real")
+st.title("🏪 Cobertura de marca propia")
+st.markdown("✅ Datos en tiempo real", unsafe_allow_html=True)
+st.markdown("🧮 KPI´s principales", unsafe_allow_html=True)
 
 # ---------------- CONFIG ----------------
 cfg = st.secrets["onedrive"]
