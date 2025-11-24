@@ -2,13 +2,16 @@ import streamlit as st
 import requests
 
 st.set_page_config(page_title="Cobertura OneDrive", page_icon="📁")
-  
+
 st.title("📁 Archivos en Carpeta 'Cobertura' – OneDrive Personal")
-  
-CLIENT_ID = st.secrets["onedrive"]["client_id"]
-CLIENT_SECRET = st.secrets["onedrive"]["client_secret"]
-REFRESH_TOKEN = st.secrets["onedrive"]["refresh_token"]
-REDIRECT_URI = st.secrets["onedrive"]["redirect_uri"]
+
+# ---------------- CONFIG ----------------
+cfg = st.secrets["onedrive"]
+CLIENT_ID = cfg["client_id"]
+CLIENT_SECRET = cfg["client_secret"]
+REFRESH_TOKEN = cfg["refresh_token"]
+REDIRECT_URI = cfg["redirect_uri"]
+
 
 def get_access_token():
     url = "https://login.microsoftonline.com/consumers/oauth2/v2.0/token"
@@ -23,18 +26,33 @@ def get_access_token():
     r = requests.post(url, data=data)
     return r.json()
 
+
 def list_files(access_token):
     url = "https://graph.microsoft.com/v1.0/me/drive/root:/Cobertura:/children"
     headers = {"Authorization": f"Bearer {access_token}"}
     r = requests.get(url, headers=headers)
     return r.json()
 
+
+# ---------------- UI ----------------
+
 if st.button("🔄 Actualizar lista"):
-    token_data = get_access_token()
-    if "access_token" not in token_data:
-        st.error("❌ Error al obtener access_token")
-        st.code(token_data)
+    st.experimental_rerun()
+
+# Obtener token
+token = get_access_token()
+
+if "access_token" not in token:
+    st.error("❌ Error al obtener access_token")
+    st.code(token)
+else:
+    st.success("Lista actualizada ✔️")
+    files = list_files(token["access_token"])
+
+    if "value" in files:
+        for item in files["value"]:
+            st.write(f"📄 **{item['name']}** — `{item['lastModifiedDateTime']}`")
     else:
-        files = list_files(token_data["access_token"])
-        st.success("Lista actualizada ✔️")
-        st.write(files)
+        st.error("No se pudieron leer los archivos")
+        st.code(files)
+
