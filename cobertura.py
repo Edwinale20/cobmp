@@ -30,7 +30,7 @@ def get_access_token():
     r = requests.post(url, data=data)
     return r.json()
 
-
+@st.cache_data
 def list_excel_files(access_token):
     url = "https://graph.microsoft.com/v1.0/me/drive/root:/Cobertura:/children"
     headers = {"Authorization": f"Bearer {access_token}"}
@@ -38,14 +38,14 @@ def list_excel_files(access_token):
 
     return [f for f in r.get("value", []) if f["name"].lower().endswith(".xlsx")]
 
-
+@st.cache_data
 def download_excel_df(access_token, file_id):
     url = f"https://graph.microsoft.com/v1.0/me/drive/items/{file_id}/content"
     headers = {"Authorization": f"Bearer {access_token}"}
     content = requests.get(url, headers=headers).content
     return pd.read_excel(io.BytesIO(content))
 
-
+@st.cache_data
 def venta(venta_semanal):
     concat_venta = pd.DataFrame()
 
