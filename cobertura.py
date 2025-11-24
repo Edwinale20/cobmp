@@ -27,66 +27,59 @@ def get_access_token():
     r = requests.post(url, data=data)
     return r.json()
 
-def list_files(access_token):
-    url = "https://graph.microsoft.com/v1.0/me/drive/root:/Cobertura:/children"
-    headers = {"Authorization": f"Bearer {access_token}"}
-    r = requests.get(url, headers=headers)
-    return r.json()
-
-
-#---------------------------------------------------------------------
 
 def list_excel_files(access_token):
     url = "https://graph.microsoft.com/v1.0/me/drive/root:/Cobertura:/children"
     headers = {"Authorization": f"Bearer {access_token}"}
     r = requests.get(url, headers=headers).json()
 
-    excel_files = [
-        f for f in r.get("value", [])
-        if f["name"].lower().endswith(".xlsx")
-    ]
-    return excel_files
+    return [f for f in r.get("value", []) if f["name"].lower().endswith(".xlsx")]
 
 
 def download_excel_df(access_token, file_id):
-    """Descarga un Excel de OneDrive y lo devuelve como DataFrame."""
     url = f"https://graph.microsoft.com/v1.0/me/drive/items/{file_id}/content"
     headers = {"Authorization": f"Bearer {access_token}"}
     content = requests.get(url, headers=headers).content
     return pd.read_excel(io.BytesIO(content))
- 
+
 
 def venta(venta_semanal):
     concat_venta = pd.DataFrame()
 
     for df2 in venta_semanal:
-
-        # 🔥 LIMPIAR UNNAMED ANTES DE TODO
         df2 = df2.loc[:, ~df2.columns.str.contains('^Unnamed')]
 
-        try:
-            if 'Semana Contable' not in df2.columns:
-                print("Advertencia: Falta Semana Contable en un archivo.")
-                continue
+        if "Semana Contable" not in df2.columns:
+            continue
 
-            df2['Semana Contable'] = df2['Semana Contable'].astype(str)
-            concat_venta = pd.concat([concat_venta, df2], ignore_index=True)
-
-        except Exception as e:
-            print(f"Error procesando archivo: {e}")
+        df2["Semana Contable"] = df2["Semana Contable"].astype(str)
+        concat_venta = pd.concat([concat_venta, df2], ignore_index=True)
 
     return concat_venta
 
-access_token = get_access_token()
-files = list_excel_files(access_token)
 
-venta_semanal = []
+# ------------------------------------------------------
 
-for f in files:
-    df = download_excel_df(access_token, f["id"])
-    venta_semanal.append(df)
+token = get_access_token()
 
-VENTA = venta(venta_semanal)
+if "access_token" not in token:
+    st.error("❌ Error obteniendo access_token")
+    st.code(token)
 
-st.dataframe(VENTA, use_container_width=True)
+else:
+    access_token = token["access_token"]
 
+    files = list_excel_files(access_token)
+
+    venta_semanal = []
+
+    for f in files:
+        df = download_excel_df(access_token, f["id"])
+        # Debug opcional:
+        # st.write(f"Archivo: {f['name']} — Shape {df.shape}")
+        venta_semanal.append(df)
+
+    VENTA = venta(venta_semanal)
+
+    st.write("📊 **Base consolidada:**")
+    st.dataframe(VENTA, use_container_width=True)
