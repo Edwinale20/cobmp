@@ -59,7 +59,7 @@ def listar_archivos():
     st.success("Archivos encontrados en la carpeta 'Cobertura':")
     for item in items:
         st.write("- ", item["name"])
-
+  
 # ==========================
 # UI
 # ==========================
