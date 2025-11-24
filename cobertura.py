@@ -96,19 +96,13 @@ def venta(venta_semanal):
 access_token = get_access_token()
 files = list_excel_files(access_token)
 
-venta_semanal = []   # ahora es una lista de DataFrames, no rutas
+venta_semanal = []
 
 for f in files:
     df = download_excel_df(access_token, f["id"])
     venta_semanal.append(df)
-
 
 VENTA = venta(venta_semanal)
 
-for f in files:
-    st.write("Descargando:", f["name"])
-    df = download_excel_df(access_token, f["id"])
-    st.write("Shape:", df.shape)
-    venta_semanal.append(df)
-
 st.dataframe(VENTA, use_container_width=True)
+
