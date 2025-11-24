@@ -5,10 +5,10 @@ st.set_page_config(page_title="Cobertura OneDrive", page_icon="📁")
   
 st.title("📁 Archivos en Carpeta 'Cobertura' – OneDrive Personal")
   
-CLIENT_ID = st.secrets["client_id"]
-CLIENT_SECRET = st.secrets["client_secret"]
-REFRESH_TOKEN = st.secrets["refresh_token"]
-REDIRECT_URI = st.secrets["redirect_uri"]
+CLIENT_ID = st.secrets["onedrive"]["client_id"]
+CLIENT_SECRET = st.secrets["onedrive"]["client_secret"]
+REFRESH_TOKEN = st.secrets["onedrive"]["refresh_token"]
+REDIRECT_URI = st.secrets["onedrive"]["redirect_uri"]
 
 def get_access_token():
     url = "https://login.microsoftonline.com/consumers/oauth2/v2.0/token"
