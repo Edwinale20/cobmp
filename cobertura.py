@@ -97,7 +97,7 @@ def venta(venta_semanal):
 
     columnas_a_eliminar = [col for col in concat_venta.columns if 'Unnamed' in col] + ['Metrics']
     concat_venta = concat_venta.drop(columns=columnas_a_eliminar, errors='ignore')
-    concat_venta['Semana Contable'] = concat_venta['Semana Contable'].astype(str)
+    #concat_venta['Semana Contable'] = concat_venta['Semana Contable'].astype(str)
     concat_venta['Unidades inventario'] = concat_venta['Unidades inventario'].astype('int64')
 
     concat_venta = concat_venta.rename(columns={
