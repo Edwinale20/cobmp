@@ -57,7 +57,7 @@ def venta(venta_semanal):
 
         df2["Semana Contable"] = df2["Semana Contable"].astype(str)
         columnas_a_eliminar = ['Metrics']
-        df = df.drop(columns=[col for col in columnas_a_eliminar if col in df.columns], errors='ignore')
+        df2 = df2.drop(columns=[col for col in columnas_a_eliminar if col in df2.columns], errors='ignore')
         concat_venta = pd.concat([concat_venta, df2], ignore_index=True)
 
     return concat_venta
