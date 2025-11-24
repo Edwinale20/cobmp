@@ -33,23 +33,7 @@ def list_files(access_token):
     r = requests.get(url, headers=headers)
     return r.json()
 
-# ---------------- CONSULTA AUTOMÁTICA ----------------
 
-token = get_access_token()
-
-if "access_token" not in token:
-    st.error("❌ Error obteniendo access_token")
-    st.code(token)
-else:
-    st.success("Archivos actualizados ✔️")
-    files = list_files(token["access_token"])
-
-    if "value" in files:
-        for item in files["value"]:
-            st.write(f"📄 **{item['name']}** — `{item['lastModifiedDateTime']}`")
-    else:
-        st.error("No se pudieron leer los archivos")
-        st.code(files)
 #---------------------------------------------------------------------
 
 def list_excel_files(access_token):
