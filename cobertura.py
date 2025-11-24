@@ -75,34 +75,21 @@ def download_excel_df(access_token, file_id):
 def venta(venta_semanal):
     concat_venta = pd.DataFrame()
 
-    for df2 in venta_semanal:   # ⬅️ antes era xlsx_file
+    for df2 in venta_semanal:
+
+        # 🔥 LIMPIAR UNNAMED ANTES DE TODO
+        df2 = df2.loc[:, ~df2.columns.str.contains('^Unnamed')]
+
         try:
-            # Ya NO se hace pd.read_excel(xlsx_file) aquí
-            # Porque df2 YA ES el DataFrame descargado de OneDrive
-
             if 'Semana Contable' not in df2.columns:
-                print(f"Advertencia: La columna 'Semana Contable' no existe en un archivo.")
+                print("Advertencia: Falta Semana Contable en un archivo.")
                 continue
-            
-            df2['Semana Contable'] = df2['Semana Contable'].astype(str)
 
+            df2['Semana Contable'] = df2['Semana Contable'].astype(str)
             concat_venta = pd.concat([concat_venta, df2], ignore_index=True)
 
         except Exception as e:
             print(f"Error procesando archivo: {e}")
-    
-    if 'Semana Contable' in concat_venta.columns:
-        cols2 = ['Semana Contable'] + [c for c in concat_venta.columns if c not in ['Semana Contable']]
-        concat_venta = concat_venta[cols2]
-
-    columnas_a_eliminar = [col for col in concat_venta.columns if 'Unnamed' in col] + ['Metrics']
-    concat_venta = concat_venta.drop(columns=columnas_a_eliminar, errors='ignore')
-    #concat_venta['Semana Contable'] = concat_venta['Semana Contable'].astype(str)
-    #concat_venta['Unidades Inventario'] = concat_venta['Unidades Inventario'].astype('int64')
-
-    concat_venta = concat_venta.rename(columns={
-        'Artículo': 'ARTICULO',
-    })
 
     return concat_venta
 
