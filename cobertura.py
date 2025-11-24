@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 st.set_page_config(page_title="Cobertura OneDrive", page_icon="📁")
-
+  
 st.title("📁 Archivos en Carpeta 'Cobertura' – OneDrive Personal")
   
 CLIENT_ID = st.secrets["client_id"]
