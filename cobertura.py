@@ -70,7 +70,7 @@ def download_excel_df(access_token, file_id):
     headers = {"Authorization": f"Bearer {access_token}"}
     content = requests.get(url, headers=headers).content
     return pd.read_excel(io.BytesIO(content))
-
+ 
 
 def venta(venta_semanal):
     concat_venta = pd.DataFrame()
