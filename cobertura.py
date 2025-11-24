@@ -1,9 +1,9 @@
 import streamlit as st
 import requests
 
-st.set_page_config(page_title="Cobertura OneDrive", page_icon="📁")
+st.set_page_config(page_title="Coberturas Marca Propia", page_icon="🏪")
 
-st.title("📁 Archivos en Carpeta 'Cobertura' – OneDrive Personal (Siempre actualizado)")
+st.title("🏪 Coberturas de marca propia en tiempo real")
 
 # ---------------- CONFIG ----------------
 cfg = st.secrets["onedrive"]
@@ -48,4 +48,4 @@ else:
     else:
         st.error("No se pudieron leer los archivos")
         st.code(files)
-
+#---------------------------------------------------------------------
