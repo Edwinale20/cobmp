@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
 import pandas as pd
+import openpyxl
+
 st.set_page_config(page_title="Coberturas Marca Propia", page_icon="🏪")
 
 st.title("🏪 Cobertura de marca propia")
