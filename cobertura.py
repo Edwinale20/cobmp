@@ -117,4 +117,10 @@ for f in files:
 
 
 VENTA = venta(venta_semanal)
-st.dataframe(VENTA, use_container_width=True)
+
+for f in files:
+    st.write("Descargando:", f["name"])
+    df = download_excel_df(access_token, f["id"])
+    st.write("Shape:", df.shape)
+    venta_semanal.append(df)
+#st.dataframe(VENTA, use_container_width=True)
